@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - scodatabase@localhost" uuid="ebb0bcc6-ddca-4986-b2ab-dd347338fff5">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>scodatabase.*</schema-pattern>
+      <default-schemas>scodatabase.*</default-schemas>
+    </data-source>
+  </component>
+</project>
