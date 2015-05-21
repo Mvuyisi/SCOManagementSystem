@@ -27,10 +27,10 @@ public class ServicesTest {
         values.put("date","15 May 2015");
         values.put("venue", "2.70 Science Building");
 
-        Services course = ServicesFactory
+        Services services = ServicesFactory
                 .createService(100, "Academic Service", values);
 
-        Assert.assertEquals(100, course.getServiceNo());
+        Assert.assertEquals(100, services.getServiceNo());
     }
 
     @Test
@@ -56,6 +56,6 @@ public class ServicesTest {
                 .build();
 
         Assert.assertEquals("22 May 2015",newservice.getDate());
-        Assert.assertEquals("2.71 Science Building",newservice.getServiceName());
+        Assert.assertEquals("Academic Service",newservice.getServiceName());
     }
 }
