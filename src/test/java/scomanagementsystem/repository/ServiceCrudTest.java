@@ -1,15 +1,14 @@
 package scomanagementsystem.repository;
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import scomanagementsystem.ScomanagementsystemApplication;
-import scomanagementsystem.conf.factory.ServicesFactory;
+import scomanagementsystem.conf.factory.*;
+import scomanagementsystem.domain.GatheringTimes;
 import scomanagementsystem.domain.Services;
 
 import java.util.HashMap;
@@ -21,56 +20,71 @@ import java.util.Map;
 @SpringApplicationConfiguration(classes= ScomanagementsystemApplication.class)
 @WebAppConfiguration
 public class ServiceCrudTest extends AbstractTestNGSpringContextTests {
-    private Long id;
+    private Integer serviceNo;
+    private String serviceName;
+    private String date;
+    private String venue;
+    private GatheringTimes gatheringTimes;
 
     @Autowired
-    private ServiceRepository repository;
-
-    @BeforeMethod
-    public void setUp() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDown() throws Exception {
-       // repository.deleteAll();
-
-    }
+    ServiceRepository serviceRepository;
 
     @Test
-    public void create() throws Exception {
-
+    public void testCreate() throws Exception
+    {
         Map<String,String> values = new HashMap<String,String>();
+        Map<String,String> time = new HashMap<String,String>();
 
-        values.put("date", "15 May 2015");
-        values.put("venue", "2.70 Science Building");
+        values.put("date", "15 June 15");
+        values.put("venue", "2.70");
+
+        time.put("startTime", "08:00");
+        time.put("endTime", "12:00");
+
+        GatheringTimes gatheringTimes1 = GatheringTimesFactory
+                .createTimes("Friday", time);
 
         Services services = ServicesFactory
-                .createService(100, "Academic Service", values);
+                .createService(10, "Academic", values, gatheringTimes1);
 
-        repository.save(services);
-        id=services.getId();
-        Assert.assertNotNull(services.getId());
+        serviceRepository.save(services);
+        serviceNo = services.getServiceNo();
+        Assert.assertNotNull(services.getServiceNo());
     }
 
-    /*@Test(dependsOnMethods = "create")
-    public void read() throws Exception {
-        Services services = repository.findOne(id);
-        Assert.assertNotNull(services.getId());
-        Assert.assertEquals("Academic Service", services.getServiceName());
-        Assert.assertTrue(Services.getDepartments().size() == 2);
+    @Test(dependsOnMethods = "testCreate")
+    public void testRead() throws Exception
+    {
+        Services services = serviceRepository.findOne(serviceNo);
+        Assert.assertNotNull(services);
     }
 
-    @Test(dependsOnMethods = "read")
-    public void update() throws Exception {
+    @Test(dependsOnMethods = "testRead")
+    public void testUpdate() throws Exception
+    {
+        Services services = serviceRepository.findOne(serviceNo);
 
+        Services newservice = new Services
+                .Builder(services.getServiceNo())
+                .copy(services)
+                .serviceName("Academic")
+                .date("15 August 15")
+                .venue("2.70")
+                .gatheringTimes(services.getGatheringTimes())
+                .build();
+
+        serviceRepository.save(newservice);
+
+        Services updatedService = serviceRepository.findOne(serviceNo);
+        Assert.assertEquals(updatedService.getServiceName(), serviceName);
     }
 
-    //    @Test(dependsOnMethods = "update")
-    public void delete() throws Exception {
-        Services services = repository.findOne(id);
-        repository.delete(services);
-        Services deletedFaculty = repository.findOne(id);
-        Assert.assertNull(deletedFaculty);
-
-    }*/
+    @Test(dependsOnMethods = "testUpdate")
+    public void testDelete() throws Exception
+    {
+        Services services = serviceRepository.findOne(serviceNo);
+        serviceRepository.delete(services);
+        Services deleteservice = serviceRepository.findOne(serviceNo);
+        Assert.assertNull(deleteservice);
+    }
 }

@@ -3,6 +3,7 @@ package scomanagementsystem.domain;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import scomanagementsystem.conf.factory.GatheringTimesFactory;
 import scomanagementsystem.conf.factory.ServicesFactory;
 
 import java.util.ArrayList;
@@ -23,36 +24,45 @@ public class ServicesTest {
     @Test
     public void testCreateService() throws Exception {
         Map<String,String> values = new HashMap<String,String>();
+        Map<String,String> time = new HashMap<String,String>();
 
-        values.put("date","15 May 2015");
-        values.put("venue", "2.70 Science Building");
+        values.put("date", "15 June 15");
+        values.put("venue", "2.70");
+
+        time.put("startTime", "08:00");
+        time.put("endTime", "12:00");
+
+        GatheringTimes gatheringTimes1 = GatheringTimesFactory
+                .createTimes("Friday", time);
 
         Services services = ServicesFactory
-                .createService(100, "Academic Service", values);
-
-        Assert.assertEquals(100, services.getServiceNo());
+                .createService(10, "Academic", values, gatheringTimes1);
+        Assert.assertEquals("Academic", services.getServiceName());
     }
 
     @Test
     public void testUpadteService() throws Exception {
-        Map<String,String> values = new HashMap<String,String>();
+        Map<String,String> updateValues = new HashMap<String,String>();
+        Map<String,String> time = new HashMap<String,String>();
 
-        values.put("date","15 May 2015");
-        values.put("venue", "2.70 Science Building");
+        updateValues.put("date", "15 June 15");
+        updateValues.put("venue", "2.70");
 
-        Services service =ServicesFactory
-                .createService(100, "Academic Service", values);
+        time.put("startTime", "08:00");
+        time.put("endTime", "12:00");
+
+        GatheringTimes gatheringTimes1 = GatheringTimesFactory
+                .createTimes("Friday", time);
+
+        Services services = ServicesFactory
+                .createService(10, "Academic", updateValues, gatheringTimes1);
         //updating
-        Map<String,String> updatevalues = new HashMap<String,String>();
-
-        updatevalues.put("date","22 May 2015");
-        updatevalues.put("venue", "2.71 Science Building");
         Services newservice = new Services
-                .Builder(service.getServiceNo())
+                .Builder(services.getServiceNo())
                 .serviceName("Academic Service")
-                .copy(service)
-                .date(updatevalues.get("date"))
-                .venue(updatevalues.get("venue"))
+                .copy(services)
+                .date(updateValues.get("date"))
+                .venue(updateValues.get("venue"))
                 .build();
 
         Assert.assertEquals("22 May 2015",newservice.getDate());

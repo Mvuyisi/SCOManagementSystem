@@ -14,6 +14,9 @@ public class Associates implements Serializable{
     @Column(unique = true)
     private String idNo;
     private String alumniStatus;
+    @Embedded
+    private Address address;
+    private PersonalDetails personalDetails;
 
     private Associates() {
     }
@@ -22,6 +25,8 @@ public class Associates implements Serializable{
         id=builder.id;
         idNo=builder.idNo;
         alumniStatus=builder.alumniStatus;
+        address=builder.address;
+        personalDetails=builder.personalDetails;
     }
 
     public Long getId() {
@@ -36,11 +41,17 @@ public class Associates implements Serializable{
         return alumniStatus;
     }
 
+    public Address getAddress() { return address; }
+
+    public PersonalDetails getPersonalDetails() { return personalDetails; }
+
     public static class Builder {
 
         private Long id;
         private String idNo;
         private String alumniStatus;
+        private Address address;
+        private PersonalDetails personalDetails;
 
         public Builder(String studentNo) {
             this.idNo = studentNo;
@@ -57,10 +68,22 @@ public class Associates implements Serializable{
             return this;
         }
 
+        public Builder address(Address value) {
+            this.address= value;
+            return this;
+        }
+
+        public Builder personalDetails(PersonalDetails value) {
+            this.personalDetails= value;
+            return this;
+        }
+
         public Builder copy(Associates value) {
             this.idNo = value.getIdNo();
             this.alumniStatus = value.getAlumniStatus();
             this.id = value.getId();
+            this.address = value.getAddress();
+            this.personalDetails = value.getPersonalDetails();
             return this;
         }
 
@@ -91,8 +114,10 @@ public class Associates implements Serializable{
     public String toString() {
         return "Associates{" +
                 "id=" + id +
-                ", idNo=" + idNo +
+                ", idNo='" + idNo + '\'' +
                 ", alumniStatus='" + alumniStatus + '\'' +
+                ", address=" + address +
+                ", personalDetails=" + personalDetails +
                 '}';
     }
 }

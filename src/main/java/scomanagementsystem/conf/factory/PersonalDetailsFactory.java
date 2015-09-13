@@ -1,6 +1,5 @@
 package scomanagementsystem.conf.factory;
 
-import scomanagementsystem.domain.Address;
 import scomanagementsystem.domain.PersonalDetails;
 
 import java.util.Map;

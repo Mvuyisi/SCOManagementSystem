@@ -6,5 +6,6 @@ import scomanagementsystem.domain.Associates;
 /**
  * Created by student on 2015/05/21.
  */
-public interface AssociatesRepository extends CrudRepository<Associates,Long> {
+public interface AssociatesRepository extends CrudRepository<Associates,String> {
+    //public Associates findById(String idNo);
 }

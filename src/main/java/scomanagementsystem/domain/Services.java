@@ -2,6 +2,7 @@ package scomanagementsystem.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by student on 2015/05/10.
@@ -12,10 +13,12 @@ public class Services implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(unique = true)
-    private int serviceNo;
+    private Integer serviceNo;
     private String serviceName;
     private String date;
     private String venue;
+    @Embedded
+    private GatheringTimes gatheringTimes;
 
     private Services() {
     }
@@ -26,13 +29,14 @@ public class Services implements Serializable{
         serviceName=builder.serviceName;
         date=builder.date;
         venue=builder.venue;
+        gatheringTimes=builder.gatheringTimes;
     }
 
     public Long getId() {
         return id;
     }
 
-    public int getServiceNo() {
+    public Integer getServiceNo() {
         return serviceNo;
     }
 
@@ -48,15 +52,18 @@ public class Services implements Serializable{
         return venue;
     }
 
+    public GatheringTimes getGatheringTimes() { return gatheringTimes; }
+
     public static class Builder {
 
         private Long id;
-        private int serviceNo;
+        private Integer serviceNo;
         private String serviceName;
         private String date;
         private String venue;
+        private GatheringTimes gatheringTimes;
 
-        public Builder(int serviceNo) {
+        public Builder(Integer serviceNo) {
             this.serviceNo = serviceNo;
         }
 
@@ -76,6 +83,11 @@ public class Services implements Serializable{
             return this;
         }
 
+        public Builder gatheringTimes(GatheringTimes value) {
+            this.gatheringTimes = value;
+            return this;
+        }
+
         public Builder id(Long value) {
             this.id = value;
             return this;
@@ -87,6 +99,7 @@ public class Services implements Serializable{
             this.serviceName = value.getServiceName();
             this.date = value.getDate();
             this.venue = value.getVenue();
+            this.gatheringTimes = value.getGatheringTimes();
             return this;
         }
 
@@ -120,6 +133,7 @@ public class Services implements Serializable{
                 ", serviceName='" + serviceName + '\'' +
                 ", date='" + date + '\'' +
                 ", venue='" + venue + '\'' +
+                ", gatheringTimes=" + gatheringTimes +
                 '}';
     }
 }
